@@ -37,9 +37,7 @@ public class HolaTilines extends HttpServlet {
 		
 		String rut = request.getParameter("rut");
 		String edad = request.getParameter("edad");
-		
-		int edadFormateada;
-		
+		int edadFormateada = -1;
 
 		
 		
@@ -50,18 +48,30 @@ public class HolaTilines extends HttpServlet {
 		
 		salida.println("<p>Su rut es " + rut + "</p>");
 
-		if (edad.isEmpty() == false){
-			edadFormateada = Integer.parseInt(edad);
-			salida.println("<p>Su edad es de: " + edadFormateada + " anios...</p>");
-		} else {
-			edadFormateada = 0;
-		}
-		
 		salida.println("<form action='http://localhost:8090/holaTilines/hola-tilines' method='GET'>");
 		salida.println("<input type=\"edad\" name=\"edad\" placeholder=\"INGRESE SU EDAD\" />");
 		salida.println("<input type=\"submit\" value=\"Enviar\" />");
 		salida.println("</form>");
-		
+
+		if (edad != null && !edad.isEmpty()) {
+			try {
+				edadFormateada = Integer.parseInt(edad);
+				salida.println("<p>Su edad es de: " + edadFormateada + " anios...</p>");
+			} catch (NumberFormatException e) {
+				salida.println("<p>La edad ingresada no es válida.</p>");
+			}
+		} else {
+			salida.println("<p>No se ingresó una edad.</p>");
+		}
+
+		if (edadFormateada > 0 && edadFormateada < 18) {
+			salida.println("<p>Usted no es mayor de edad...</p>");
+		} else if (edadFormateada >= 18) {
+			salida.println("<p>Usted ES mayor de edad</p>");
+		} else {
+			salida.println("<p>La edad tiene que ser mayor que 0.</p>");
+		}
+			
 		salida.println("<br/> <br/>");
 		
 		salida.println("<h2>Calculadora</h2>");
@@ -73,23 +83,13 @@ public class HolaTilines extends HttpServlet {
 		salida.println("<input type=\"submit\" value=\"Sumar\" />");
 		salida.println("</form>");
 		
-		
-		if (edadFormateada > 0 && edadFormateada < 18) {
-			salida.println("<p>Usted no es mayor de edad...</p>");
-		} else if (edadFormateada >= 18) {
-			salida.println("<p>Usted ES mayor de edad</p>");
-		} else {
-			salida.println("<p>La edad tiene que ser mayor que 0.</p>");
-		}
-		
-		salida.println("</html></body>");
+		salida.println("</body></html>");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 		// Aqui va a llegar la suma de los numeros...
 		response.setContentType("text/html");
@@ -105,11 +105,9 @@ public class HolaTilines extends HttpServlet {
 		//doGet(request, response);
 		
 		salida.println("<html><body>");
-		salida.println("<h3>RESULTADO</h3>");
+		salida.println("<h1>RESULTADO</h1>");
 		salida.println("<p>La suma de los valores " + num1 + " y " + num2 + " es: " + resultado + "</p>");
 		salida.println("</html></body>");
-		
-		
 		
 	}
 
